@@ -1,12 +1,663 @@
-
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Task Tamer</title>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Task Tamer — Plan & Track </title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #f3f4f6;
+    --card: #ffffff;
+    --muted: #6b7280;
+    --accent: #7c3aed;
+    --accent-2: #06b6d4;
+    --success: #10b981;
+    --danger: #ef4444;
+    --glass: rgba(255,255,255,0.6);
+    --radius: 12px;
+    --shadow: 0 8px 30px rgba(15,23,42,0.06);
+    --max-width: 1100px;
+  }
+
+  [data-theme="dark"]{
+    --bg: #071025;
+    --card: #071429;
+    --muted: #9aa4b2;
+    --glass: rgba(255,255,255,0.02);
+    --shadow: 0 10px 30px rgba(2,6,23,0.7);
+  }
+
+  *{box-sizing:border-box}
+  html,body{height:100%;margin:0;font-family:Inter,system-ui,Segoe UI,Roboto,"Helvetica Neue",Arial; background:var(--bg); color: #061228;}
+  [data-theme="dark"] body{ color: #e6eef8; }
+  .app{min-height:100vh;display:flex;justify-content:center;align-items:flex-start;padding:28px}
+  .container{width:100%;max-width:var(--max-width);display:grid;grid-template-columns:320px 1fr;gap:22px}
+  .sidebar{background:linear-gradient(180deg,var(--card),var(--glass));border-radius:var(--radius);padding:18px;box-shadow:var(--shadow);position:sticky;top:28px;height:calc(100vh - 56px);overflow:auto}
+  .brand{display:flex;gap:12px;align-items:center;margin-bottom:12px}
+  .logo{width:52px;height:52px;border-radius:12px;background:linear-gradient(135deg,var(--accent),#5b21b6);display:flex;align-items:center;justify-content:center;color:white;font-weight:700;font-size:18px;box-shadow:0 8px 22px rgba(124,58,237,0.15)}
+  h1{margin:0;font-size:18px}
+  .small{font-size:12px;color:var(--muted)}
+  .card{background:var(--card);border-radius:12px;padding:12px;box-shadow:var(--shadow);margin-bottom:12px}
+  .input, textarea, select{width:100%;padding:9px 10px;border-radius:8px;border:1px solid rgba(15,23,42,0.06);background:transparent;margin-top:8px;color:inherit}
+  textarea{min-height:70px;resize:vertical}
+  .row{display:flex;gap:8px}
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:10px 12px;border-radius:10px;border:0;cursor:pointer;background:var(--accent);color:white;font-weight:600}
+  .btn.ghost{background:transparent;color:var(--accent);border:1px solid rgba(124,58,237,0.10)}
+  .muted{color:var(--muted);font-size:13px;margin-top:8px}
+  .filter-btn{display:inline-block;padding:8px 10px;border-radius:999px;margin:4px 4px 0 0;border:1px solid transparent;cursor:pointer}
+  .filter-btn.active{background:var(--accent);color:white;box-shadow:0 6px 18px rgba(124,58,237,0.12)}
+  .tag{font-size:12px;padding:4px 8px;border-radius:999px;background:rgba(15,23,42,0.04)}
+
+  /* main layout */
+  .main{min-height:70vh}
+  .header{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:16px}
+  .search{flex:1;display:flex;align-items:center;gap:8px;background:var(--card);border-radius:12px;padding:10px 14px}
+  .grid{display:grid;grid-template-columns:1fr 380px;gap:18px}
+  .task-list{padding:14px}
+  .task{display:flex;gap:12px;align-items:flex-start;padding:12px;border-radius:10px;margin-bottom:10px;border:1px solid rgba(15,23,42,0.04);background:linear-gradient(180deg,transparent,rgba(0,0,0,0.01))}
+  .task.dragging{opacity:.7;transform:scale(.995);box-shadow:0 8px 30px rgba(0,0,0,0.08)}
+  .task .left{width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-weight:700}
+  .meta{flex:1}
+  .meta h3{margin:0;font-size:15px}
+  .meta p{margin:6px 0 0 0;font-size:13px;color:var(--muted)}
+  .tags{margin-top:8px;display:flex;gap:6px;flex-wrap:wrap}
+  .priority-high{background:linear-gradient(90deg,#ff7a7a,#ff4d4d);color:white}
+  .priority-med{background:linear-gradient(90deg,#f59e0b,#f97316);color:white}
+  .priority-low{background:linear-gradient(90deg,#34d399,#10b981);color:white}
+  .actions{display:flex;gap:8px}
+  .icon-btn{border:0;background:transparent;cursor:pointer;padding:6px;border-radius:8px}
+
+  .progress-wrap{height:8px;background:rgba(0,0,0,0.06);border-radius:99px;overflow:hidden}
+  .progress{height:100%;background:linear-gradient(90deg,var(--accent),#6d28d9);width:0%}
+
+  @media (max-width:1000px){
+    .container{grid-template-columns:1fr}
+    .grid{grid-template-columns:1fr}
+    .sidebar{position:relative;height:auto}
+  }
+
+  /* small visual helpers */
+  .muted-2{color:var(--muted);font-size:13px}
+  .empty{padding:18px;border-radius:10px;background:linear-gradient(180deg,rgba(0,0,0,0.02),transparent);text-align:center;color:var(--muted)}
+  footer{margin-top:8px;font-size:12px;color:var(--muted);text-align:center}
+  a.small-link{font-size:13px;color:var(--accent)}
+</style>
 </head>
 <body>
-    
+
+<!--
+  IMPORTANT Google Calendar setup:
+  1. Go to Google Cloud Console -> Create a project (or select one)
+  2. OAuth consent screen: configure for "External" and add scopes email/profile
+  3. Create OAuth 2.0 Client ID for "Web application" and add "http://localhost" (or the origin you'll serve from) as an authorized origin
+  4. Create an API key (optional in some flows). Enable "Google Calendar API" in the APIs & Services Library.
+  5. Copy your CLIENT_ID and API_KEY below into the JS constants CLIENT_ID and API_KEY.
+  6. When you open this file in a browser, click "Google Calendar: Sign in" to authorize.
+-->
+
+<div class="app" id="app">
+  <div class="container" role="application" aria-label="Task Tamer">
+    <aside class="sidebar" aria-labelledby="sidebarTitle">
+      <div class="brand">
+        <div class="logo">TT</div>
+        <div>
+          <h1 id="sidebarTitle">Task Tamer</h1>
+          <div class="small">Plan • Track • Focus</div>
+        </div>
+      </div>
+
+      <div class="card" aria-label="Add task">
+        <label for="title">Title</label>
+        <input id="title" class="input" placeholder="e.g. Maths homework" />
+
+        <label for="desc">Description <span class="small">(optional)</span></label>
+        <textarea id="desc" placeholder="Notes..."></textarea>
+
+        <div class="row" style="margin-top:8px">
+          <input id="due" type="date" class="input" style="flex:1" />
+          <input id="dueTime" type="time" class="input" style="width:120px" />
+        </div>
+
+        <div style="display:flex;gap:8px;margin-top:8px;align-items:center">
+          <select id="priority" class="input" style="width:160px">
+            <option value="medium">Priority: Medium</option>
+            <option value="high">Priority: High</option>
+            <option value="low">Priority: Low</option>
+          </select>
+          <input id="tag" class="input" placeholder="Tag (e.g. Study)" style="flex:1" />
+        </div>
+
+        <div style="display:flex;gap:8px;margin-top:10px;justify-content:flex-end">
+          <button class="btn ghost" id="clearBtn" title="Clear fields">Clear</button>
+          <button class="btn" id="addBtn" title="Add task">Add task</button>
+        </div>
+      </div>
+
+      <div class="card" aria-label="Filters">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <div class="small-muted">Filters</div>
+          <button id="themeToggle" class="btn ghost" title="Toggle theme">Theme</button>
+        </div>
+
+        <div style="margin-top:10px">
+          <button class="filter-btn active" data-filter="all">All</button>
+          <button class="filter-btn" data-filter="today">Today</button>
+          <button class="filter-btn" data-filter="overdue">Overdue</button>
+          <button class="filter-btn" data-filter="completed">Completed</button>
+        </div>
+
+        <div class="muted" style="margin-top:12px">Tags</div>
+        <div id="tagList" style="margin-top:8px"></div>
+      </div>
+
+      <div class="card">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <div><strong>Google Calendar</strong></div>
+          <div>
+            <button id="gSignBtn" class="btn ghost">Sign in</button>
+          </div>
+        </div>
+        <p class="muted-2" style="margin-top:8px">Sign in and choose a calendar to push tasks as events.</p>
+        <div style="margin-top:10px">
+          <select id="gCalendarList" class="input"></select>
+          <div style="display:flex;gap:8px;margin-top:8px;justify-content:flex-end">
+            <button id="syncSelected" class="btn ghost">Sync Selected</button>
+            <button id="syncAll" class="btn">Sync All</button>
+          </div>
+        </div>
+      </div>
+
+      <footer>
+        <div class="muted">Task Tamer · v1.1</div>
+        <div class="small-muted" style="margin-top:6px">Data stored locally (localStorage). Google Calendar sync is optional.</div>
+      </footer>
+    </aside>
+
+    <main class="main">
+      <div class="header">
+        <div class="search card" role="search">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" style="opacity:.9"><path d="M21 21l-4.35-4.35" stroke="#6b7280" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="11" cy="11" r="5" stroke="#6b7280" stroke-width="1.5"/></svg>
+          <input id="search" placeholder="Search tasks or tags..." aria-label="Search tasks" />
+          <div class="muted-2"> | Filter: <span id="activeFilter">All</span></div>
+        </div>
+
+        <div style="display:flex;gap:12px;align-items:center">
+          <div class="card" style="padding:8px 12px;min-width:220px">
+            <div style="display:flex;justify-content:space-between;align-items:center">
+              <div class="small-muted">Progress</div>
+              <div class="small-muted" id="progressPercent">0%</div>
+            </div>
+            <div class="progress-wrap" style="margin-top:8px" aria-hidden="true"><div class="progress" id="progressBar"></div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid">
+        <section class="card task-list" aria-labelledby="tasksTitle">
+          <h2 id="tasksTitle" style="margin-top:0">Tasks</h2>
+          <div id="tasksContainer" aria-live="polite"></div>
+          <div id="noTasks" class="empty" style="display:none">No tasks yet. Add one with the form.</div>
+        </section>
+
+        <aside class="card" aria-label="Daily view" style="padding:16px">
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <div style="font-weight:700">Daily View</div>
+            <input id="viewDate" type="date" class="input" style="width:160px" />
+          </div>
+          <div style="margin-top:12px" class="muted-2">Tasks for selected date</div>
+          <div id="dayTasks" style="margin-top:12px"></div>
+          <div id="noDayTasks" class="empty" style="display:none;margin-top:12px">No tasks on this day.</div>
+        </aside>
+      </div>
+    </main>
+  </div>
+</div>
+
+<!-- Google API (will be loaded when used). We still include script; if you don't use calendar, it's inert. -->
+<script src="https://apis.google.com/js/api.js" defer></script>
+
+<script>
+/* ====== Config: put your credentials here ======
+   Create a Google Cloud project, enable Calendar API, make OAuth Client ID
+   Replace these placeholders with your values.
+*/
+const CLIENT_ID = 'REPLACE_WITH_YOUR_CLIENT_ID.apps.googleusercontent.com';
+const API_KEY = 'REPLACE_WITH_YOUR_API_KEY';
+
+/* Scopes required */
+const SCOPES = 'https://www.googleapis.com/auth/calendar.events https://www.googleapis.com/auth/calendar.readonly';
+
+/* ====== End config ====== */
+
+const STORAGE_KEY = 'tasktamer.tasks.v2';
+const CALENDAR_KEY = 'tasktamer.calendar.selected';
+
+const $ = (sel, root=document) => root.querySelector(sel);
+const $$ = (sel, root=document) => Array.from(root.querySelectorAll(sel));
+
+let gapiInited = false;
+let gisInited = false;
+let googleAuthorized = false;
+let gapiClientLoaded = false;
+
+let state = {
+  tasks: [],
+  filter: 'all',
+  search: '',
+  theme: localStorage.getItem('tasktamer.theme') || (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'),
+  googleCalendarId: localStorage.getItem(CALENDAR_KEY) || null
+};
+
+/* ========== Theme ========== */
+function setTheme(theme){
+  document.documentElement.setAttribute('data-theme', theme === 'dark' ? 'dark' : 'light');
+  localStorage.setItem('tasktamer.theme', theme);
+  state.theme = theme;
+}
+setTheme(state.theme);
+
+/* ========== Persist ========== */
+function load(){
+  try{
+    const raw = localStorage.getItem(STORAGE_KEY);
+    state.tasks = raw ? JSON.parse(raw) : [];
+  }catch(e){ state.tasks = []; }
+}
+function save(){ localStorage.setItem(STORAGE_KEY, JSON.stringify(state.tasks)); }
+
+/* ========== Utilities ========== */
+function uuid(){ return 't'+Date.now().toString(36)+Math.random().toString(36).slice(2,8); }
+function todayIso(){ const d=new Date(); const off=d.getTimezoneOffset(); const local= new Date(d.getTime()-off*60000); return local.toISOString().slice(0,10); }
+function formatDateIso(d){ if(!d) return ''; const dt=new Date(d); if(isNaN(dt)) return d; return dt.toLocaleDateString(); }
+function escapeHtml(s){ return String(s || '').replace(/[&<>"']/g, function(m){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]; }); }
+function isOverdue(t){ if(t.completed) return false; if(!t.due) return false; const end=new Date(t.due+'T23:59:59'); return end < new Date(); }
+
+/* ========== Render ========== */
+function renderTasks(){
+  const container = $('#tasksContainer');
+  container.innerHTML = '';
+  let tasks = state.tasks.slice();
+
+  // sort by manual order property first, then due, priority, createdAt
+  tasks.sort((a,b)=>{
+    const ai = (a.order || 0), bi = (b.order || 0);
+    if(ai !== bi) return ai - bi;
+    if(a.completed !== b.completed) return a.completed ? 1 : -1;
+    if(a.due && b.due){
+      if(a.due !== b.due) return a.due.localeCompare(b.due);
+    } else if(a.due || b.due){
+      return a.due ? -1 : 1;
+    }
+    const pr = {high:-2, medium:0, low:2};
+    return (pr[a.priority]||0) - (pr[b.priority]||0);
+  });
+
+  // apply search and filter
+  if(state.search){
+    const q = state.search.toLowerCase();
+    tasks = tasks.filter(t=> (t.title||'').toLowerCase().includes(q) || (t.desc||'').toLowerCase().includes(q) || (t.tag||'').toLowerCase().includes(q));
+  }
+  if(state.filter === 'today'){
+    tasks = tasks.filter(t=> t.due === todayIso());
+  } else if(state.filter === 'overdue'){
+    tasks = tasks.filter(t=> isOverdue(t));
+  } else if(state.filter === 'completed'){
+    tasks = tasks.filter(t=> t.completed);
+  }
+
+  if(tasks.length === 0){
+    $('#noTasks').style.display = '';
+  } else {
+    $('#noTasks').style.display = 'none';
+  }
+
+  tasks.forEach((t, idx)=>{
+    const el = document.createElement('div');
+    el.className = 'task';
+    el.setAttribute('draggable','true');
+    el.dataset.id = t.id;
+    el.dataset.index = idx;
+    el.innerHTML = `
+      <div class="left" style="background:${t.completed ? 'linear-gradient(90deg,#d1fae5,#10b981)' : (t.priority==='high'?'#ffe6e6': t.priority==='low' ? '#e6fff3' : '#fff6e6')}">
+        <button class="icon-btn toggle-complete" title="${t.completed ? 'Mark as not done' : 'Mark as complete'}">${t.completed ? '✓' : ''}</button>
+      </div>
+      <div class="meta">
+        <h3>${escapeHtml(t.title)} ${t.completed ? '<span style="font-weight:600;color:var(--muted);font-size:12px"> · Done</span>':''}</h3>
+        <p>${escapeHtml(t.desc || '')}</p>
+        <div class="tags">
+          ${t.due ? `<span class="tag">${formatDateIso(t.due)} ${t.time?('· '+t.time):''}</span>` : ''}
+          ${t.tag ? `<span class="tag">${escapeHtml(t.tag)}</span>` : ''}
+          <span class="tag ${t.priority==='high'?'priority-high': t.priority==='low'?'priority-low':'priority-med'}">${t.priority}</span>
+        </div>
+      </div>
+      <div class="actions">
+        <button class="icon-btn edit" title="Edit">✎</button>
+        <button class="icon-btn delete" title="Delete">🗑</button>
+        <button class="icon-btn push" title="Push to Calendar">⤴</button>
+      </div>
+    `;
+    // listeners
+    el.querySelector('.toggle-complete').addEventListener('click', ()=> toggleComplete(t.id));
+    el.querySelector('.edit').addEventListener('click', ()=> startEdit(t.id));
+    el.querySelector('.delete').addEventListener('click', ()=> deleteTask(t.id));
+    el.querySelector('.push').addEventListener('click', ()=> pushTaskToCalendar(t.id));
+    // drag & drop events
+    el.addEventListener('dragstart', handleDragStart);
+    el.addEventListener('dragover', handleDragOver);
+    el.addEventListener('drop', handleDrop);
+    el.addEventListener('dragend', handleDragEnd);
+    container.appendChild(el);
+  });
+
+  updateStats();
+  renderTagList();
+  renderDayTasks($('#viewDate').value || todayIso());
+}
+
+/* Tag list */
+function renderTagList(){
+  const tagList = $('#tagList'); tagList.innerHTML = '';
+  const counts = {};
+  state.tasks.forEach(t=>{ if(t.tag) counts[t.tag] = (counts[t.tag]||0)+1; });
+  for(const tag in counts){
+    const btn = document.createElement('button');
+    btn.className = 'filter-btn';
+    btn.textContent = `${tag} (${counts[tag]})`;
+    btn.addEventListener('click', ()=> {
+      state.search = tag; $('#search').value = tag;
+      document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+      renderTasks();
+    });
+    tagList.appendChild(btn);
+  }
+}
+
+/* Day tasks */
+function renderDayTasks(iso){
+  const cont = $('#dayTasks'); cont.innerHTML = '';
+  const list = state.tasks.filter(t=> t.due === iso).sort((a,b)=>(a.time||'').localeCompare(b.time||''));
+  if(list.length === 0){ $('#noDayTasks').style.display = ''; return; } $('#noDayTasks').style.display = 'none';
+  list.forEach(t=>{
+    const node = document.createElement('div'); node.className='task'; node.style.alignItems='center';
+    node.innerHTML = `<div style="width:8px;height:40px;border-radius:6px;background:${t.priority==='high'?'#ff4d4d': t.priority==='low'?'#10b981':'#f59e0b'};margin-right:8px"></div>
+      <div style="flex:1"><strong>${escapeHtml(t.title)}</strong><div class="small-muted">${t.time||''}</div><div class="small-muted">${escapeHtml(t.desc||'')}</div></div>`;
+    cont.appendChild(node);
+  });
+}
+
+/* Stats */
+function updateStats(){
+  const total = state.tasks.length;
+  const completed = state.tasks.filter(t=>t.completed).length;
+  const pct = total ? Math.round(completed/total*100) : 0;
+  $('#progressPercent').textContent = pct + '%';
+  $('#progressBar').style.width = pct + '%';
+}
+
+/* ========== CRUD ========== */
+function addTaskFromForm(){
+  const title = $('#title').value.trim(); if(!title){ alert('Please enter a title'); $('#title').focus(); return; }
+  const task = {
+    id: uuid(),
+    title,
+    desc: $('#desc').value.trim(),
+    due: $('#due').value || null,
+    time: $('#dueTime').value || '',
+    priority: $('#priority').value || 'medium',
+    tag: $('#tag').value.trim(),
+    completed: false,
+    createdAt: new Date().toISOString(),
+    order: state.tasks.length
+  };
+  state.tasks.push(task); save(); resetForm(); renderTasks();
+}
+function resetForm(){
+  $('#title').value=''; $('#desc').value=''; $('#due').value=''; $('#dueTime').value=''; $('#priority').value='medium'; $('#tag').value='';
+  $('#addBtn').textContent = 'Add task'; delete $('#addBtn').dataset.editing;
+}
+function toggleComplete(id){ const t = state.tasks.find(x=>x.id===id); if(!t) return; t.completed = !t.completed; save(); renderTasks(); }
+function startEdit(id){
+  const t = state.tasks.find(x=>x.id===id); if(!t) return;
+  $('#title').value = t.title; $('#desc').value = t.desc; $('#due').value = t.due || ''; $('#dueTime').value = t.time || ''; $('#priority').value = t.priority || 'medium'; $('#tag').value = t.tag || '';
+  $('#addBtn').textContent = 'Update task'; $('#addBtn').dataset.editing = id;
+}
+function deleteTask(id){ if(!confirm('Delete this task?')) return; state.tasks = state.tasks.filter(x=>x.id!==id); save(); renderTasks(); }
+
+/* ========== Drag & Drop reorder logic (HTML5 Drag API) ========== */
+let dragSrcEl = null;
+function handleDragStart(e){
+  dragSrcEl = this;
+  this.classList.add('dragging');
+  e.dataTransfer.effectAllowed = 'move';
+  e.dataTransfer.setData('text/plain', this.dataset.id);
+}
+function handleDragOver(e){
+  e.preventDefault();
+  e.dataTransfer.dropEffect = 'move';
+  const target = this;
+  if(!dragSrcEl || target === dragSrcEl) return;
+  // visually indicate possible drop position
+  const container = target.parentNode;
+  const children = Array.from(container.querySelectorAll('.task'));
+  const srcIndex = children.indexOf(dragSrcEl);
+  const tgtIndex = children.indexOf(target);
+  if(srcIndex < tgtIndex){
+    container.insertBefore(dragSrcEl, target.nextSibling);
+  } else {
+    container.insertBefore(dragSrcEl, target);
+  }
+}
+function handleDrop(e){
+  e.stopPropagation();
+  // update order values based on current DOM
+  const container = $('#tasksContainer');
+  const children = Array.from(container.querySelectorAll('.task'));
+  children.forEach((el, idx)=> {
+    const id = el.dataset.id;
+    const t = state.tasks.find(x=>x.id===id);
+    if(t) t.order = idx;
+  });
+  save(); renderTasks();
+}
+function handleDragEnd(){
+  this.classList.remove('dragging');
+  dragSrcEl = null;
+}
+
+/* ========== Google Calendar Integration (client-side) ========== */
+
+let gapiLoaded = false;
+let googleAuthInstance = null;
+
+function gapiLoadedHandler(){
+  gapiLoaded = true;
+  // nothing else until user clicks sign-in; we will load client after sign-in
+}
+
+function initGapiClient(){
+  if(!CLIENT_ID || CLIENT_ID.includes('REPLACE')) {
+    console.warn('Google CLIENT_ID not set. Fill in the CLIENT_ID constant in the HTML to enable Calendar sync.');
+    return Promise.reject('CLIENT_ID missing');
+  }
+  // load gapi client (gapi.client)
+  return new Promise((resolve, reject)=>{
+    if(!window.gapi) return reject('gapi not loaded');
+    window.gapi.load('client:auth2', async ()=>{
+      try{
+        await window.gapi.client.init({
+          apiKey: API_KEY,
+          clientId: CLIENT_ID,
+          discoveryDocs: ["https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest"],
+          scope: SCOPES
+        });
+        googleAuthInstance = window.gapi.auth2.getAuthInstance();
+        resolve();
+      }catch(err){ reject(err); }
+    });
+  });
+}
+
+async function handleSignInClick(){
+  if(!gapiLoaded) {
+    // gapi might be loaded async; give it a chance
+    console.warn('gapi not ready, trying to initialize...');
+  }
+  try{
+    await initGapiClient();
+    if(!googleAuthInstance) { alert('Google Auth init failed.'); return; }
+    if(!googleAuthInstance.isSignedIn.get()){
+      await googleAuthInstance.signIn();
+    }
+    googleAuthorized = true;
+    $('#gSignBtn').textContent = 'Signed in';
+    await loadCalendars();
+  }catch(err){
+    console.error('Google init error', err);
+    alert('Google init error: ' + (err.message || err));
+  }
+}
+
+async function loadCalendars(){
+  try{
+    const resp = await gapi.client.calendar.calendarList.list();
+    const items = resp.result.items || [];
+    const sel = $('#gCalendarList'); sel.innerHTML = '';
+    items.forEach(cal=>{
+      const opt = document.createElement('option'); opt.value = cal.id; opt.textContent = cal.summary + (cal.accessRole?(' ('+cal.accessRole+')'):'');
+      sel.appendChild(opt);
+    });
+    if(state.googleCalendarId){
+      try{ sel.value = state.googleCalendarId; }catch(e){}
+    }
+    sel.addEventListener('change', ()=> {
+      state.googleCalendarId = sel.value; localStorage.setItem(CALENDAR_KEY, sel.value);
+    });
+    if(items.length && !state.googleCalendarId) { state.googleCalendarId = items[0].id; localStorage.setItem(CALENDAR_KEY, state.googleCalendarId); sel.value = state.googleCalendarId; }
+  }catch(e){
+    console.error('calendar list error', e);
+  }
+}
+
+/* Push a single task to selected calendar as an event */
+async function pushTaskToCalendar(taskId){
+  if(!CLIENT_ID || CLIENT_ID.includes('REPLACE')) { alert('Google CLIENT_ID not set. Please configure CLIENT_ID in the HTML to use Calendar sync.'); return; }
+  if(!googleAuthInstance || !googleAuthInstance.isSignedIn.get()){
+    await handleSignInClick();
+    if(!googleAuthInstance || !googleAuthInstance.isSignedIn.get()) return;
+  }
+  const task = state.tasks.find(t=>t.id===taskId); if(!task) return;
+  if(!task.due){
+    if(!confirm('This task has no due date. Do you want to create an all-day event with today as date?')) task.due = todayIso();
+  }
+  const calendarId = state.googleCalendarId;
+  if(!calendarId){ alert('No calendar selected.'); return; }
+  // construct event
+  let event = {
+    summary: task.title,
+    description: task.desc || '',
+    start: {},
+    end: {}
+  };
+  if(task.due && task.time){
+    // combine date and time -> use local timezone
+    const startDateTime = task.due + 'T' + task.time;
+    const st = new Date(startDateTime);
+    const end = new Date(st.getTime() + 60*60*1000); // default 1 hour
+    event.start = { dateTime: st.toISOString() };
+    event.end = { dateTime: end.toISOString() };
+  } else if(task.due){
+    // all-day event
+    const next = new Date(task.due); next.setDate(next.getDate()+1);
+    event.start = { date: task.due };
+    event.end = { date: next.toISOString().slice(0,10) };
+  } else {
+    // fallback: use today as all-day
+    event.start = { date: todayIso() };
+    const next = new Date(); next.setDate(next.getDate()+1);
+    event.end = { date: next.toISOString().slice(0,10) };
+  }
+
+  try{
+    const req = gapi.client.calendar.events.insert({
+      calendarId,
+      resource: event
+    });
+    const resp = await req;
+    alert('Event created: ' + (resp.result.htmlLink || resp.result.id));
+  }catch(err){
+    console.error('Push error', err);
+    alert('Failed to push event: ' + (err.message || err.error || JSON.stringify(err)));
+  }
+}
+
+/* Push selected or all */
+async function pushAllToCalendar(all=false){
+  if(!CLIENT_ID || CLIENT_ID.includes('REPLACE')) { alert('Set CLIENT_ID in file.'); return; }
+  if(!googleAuthInstance || !googleAuthInstance.isSignedIn.get()) await handleSignInClick();
+  if(!googleAuthInstance || !googleAuthInstance.isSignedIn.get()) return;
+  const toPush = all ? state.tasks : state.tasks.filter(t=> !t.pushed);
+  if(toPush.length === 0){ alert('No tasks to push.'); return; }
+  for(const t of toPush){
+    await pushTaskToCalendar(t.id);
+    t.pushed = true;
+  }
+  save(); renderTasks();
+}
+
+/* ========== Event wiring ========== */
+document.addEventListener('DOMContentLoaded', ()=> {
+  load();
+  renderTasks();
+  $('#viewDate').value = todayIso();
+  $('#viewDate').addEventListener('change', e=> renderDayTasks(e.target.value));
+  $('#addBtn').addEventListener('click', ()=>{
+    const editing = $('#addBtn').dataset.editing;
+    if(editing){
+      const t = state.tasks.find(x=>x.id===editing); if(!t) return;
+      t.title = $('#title').value.trim() || t.title;
+      t.desc = $('#desc').value.trim(); t.due = $('#due').value || null; t.time = $('#dueTime').value || ''; t.priority = $('#priority').value; t.tag = $('#tag').value.trim();
+      $('#addBtn').textContent = 'Add task'; delete $('#addBtn').dataset.editing; resetForm(); save(); renderTasks();
+    } else addTaskFromForm();
+  });
+  $('#clearBtn').addEventListener('click', resetForm);
+
+  $('#search').addEventListener('input', (e)=> { state.search = e.target.value; renderTasks(); });
+
+  $$('.filter-btn').forEach(b=>{
+    b.addEventListener('click', ()=>{
+      document.querySelectorAll('.filter-btn').forEach(x=>x.classList.remove('active'));
+      b.classList.add('active');
+      state.filter = b.dataset.filter || 'all';
+      $('#activeFilter').textContent = b.textContent;
+      renderTasks();
+    });
+  });
+
+  // theme toggle
+  $('#themeToggle').addEventListener('click', ()=> setTheme(state.theme === 'dark' ? 'light' : 'dark'));
+
+  // Google buttons
+  $('#gSignBtn').addEventListener('click', handleSignInClick);
+  $('#syncAll').addEventListener('click', ()=> pushAllToCalendar(true));
+  $('#syncSelected').addEventListener('click', ()=> pushAllToCalendar(false));
+  $('#gCalendarList').addEventListener('change', ()=> { state.googleCalendarId = $('#gCalendarList').value; localStorage.setItem(CALENDAR_KEY, state.googleCalendarId); });
+
+  // keyboard shortcut
+  document.addEventListener('keydown', (e)=>{ if((e.ctrlKey||e.metaKey) && e.key.toLowerCase()==='k'){ e.preventDefault(); $('#search').focus(); } });
+
+  // If gapi is available already, mark loaded
+  if(window.gapi) gapiLoadedHandler();
+  // Try to load gapi just in case
+  // Note: gapi script is included in HTML <script src="https://apis.google.com/js/api.js">
+});
+
+/* Expose functions used by toolbar */
+window.pushTaskToCalendar = pushTaskToCalendar;
+
+/* When page unload, persist */
+window.addEventListener('beforeunload', ()=> save());
+
+</script>
 </body>
 </html>
