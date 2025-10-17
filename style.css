@@ -21,7 +21,10 @@ body {
 }
 .Logo{
     color: White;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: "League Spartan", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: bold;
+    font-style: normal;font-family: '', Tahoma, Geneva, Verdana, sans-serif;
     font-size: 5vh; ;
 }
 .holder{
