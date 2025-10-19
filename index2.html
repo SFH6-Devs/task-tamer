@@ -67,21 +67,33 @@
 
         }
         .main{
+            width: calc((2/3)*100%);
             flex-grow: 1;
             display: flex;
             justify-content: center;
             align-items: center;
         }
-        .add-task button{
+        .add-task{
+            display: flex;
+            justify-content: center;
+            flex-direction: column;
+        }
+        .btn{
+            display: flex;
             height: 2rem;
+            width: 6rem;
             background: linear-gradient(135deg, #1C04B2 0%, #6C2FE4 50%, #AB20D1 100%);
+            justify-content: center;
             
+            align-items: center;
+            border-radius: 0.5rem;
         }
-        .add-task h1{
-            padding-inline: 5%;
-            padding-block: 5%;
-            background-color: var(--accent-color);
+        .btn button{
+            border-radius: 0.5rem;
+            width: 90%;
+            height: 75%;
         }
+        
     </style>
     <body>
 
@@ -100,10 +112,11 @@
                 <div class="sidebar"></div>
                 <div class="main">
                     <div class="add-task">
-                        <h2 style="font-family: Helvetica;">Add New Task</h2>
-                        <form>
-                            <button type="submit" style="font-family: Helvetica; padding: 10px 20px; background-color: var(--primary-color); color: var(--sidebar-background-color); border: none; border-radius: 5px; cursor: pointer;"><h1>+</h1></button>
-                        </form>
+                        <h2>Add New Task</h2>
+                        <div class="btn">
+                            <button type="submit">Add Task</button>
+                        </div>
+                        
                     </div>
                 </div>
             </section>
