@@ -20,17 +20,8 @@ body {
             
 }
 .Logo{
-<<<<<<< HEAD
-    color: White;
-    font-family: "League Spartan", sans-serif;
-    font-optical-sizing: auto;
-    font-weight: bold;
-    font-style: normal;font-family: '', Tahoma, Geneva, Verdana, sans-serif;
-    font-size: 5vh; ;
-=======
     display:flex;
     width:50px;
->>>>>>> cd9f0b94bb356c35d8c3544251148d457ce7d25a
 }
 .holder{
     margin: 10% 0%;
