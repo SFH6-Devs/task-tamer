@@ -15,10 +15,12 @@
             --nav-background-color: #e0e0e0bd;
             --sidebar-background-color: #ffffff;
             --accent-color: #ab20d1;
+            --sidewidth: 25%;
         }
         body {
             margin: 0;
             background-color: var(--background-color);
+            
         }
         nav {
             margin: 0;
@@ -26,11 +28,10 @@
             justify-content: space-between;
             gap: 20px;
             background-color: var(--nav-background-color);
-            align-items: bottom;
+            align-items: center;
             padding-inline: 20px; /* top right bottom left */
             padding-block: 10px;
-            border-bottom: 2px solid var(--nav-background-color);
-            
+            border-bottom: 2px solid var(--nav-background-color);            
         }
         nav a {
             text-decoration: none;
@@ -59,26 +60,35 @@
         section {
             display: flex;
             height: calc(100vh - 60px); /* Full height minus nav height */
+            gap: 20px;
         }
         .sidebar {
-            width: calc((1/3)*100%);
+            width: calc(var(--sidewidth));
+            max-width: 270px;
             background-color: var(--sidebar-background-color);
             border-right: 1px solid var(--nav-background-color);
-
+            max-height: 30vh;
         }
         .main{
-            width: calc((2/3)*100%);
-            flex-grow: 1;
+            background-color: beige;
+            width: calc(2*var(--sidewidth));
             display: flex;
             justify-content: center;
             align-items: center;
+            max-height: 80vh;
+            max-width: calc(270px*2);
         }
         .add-task{
+            font-family: Helvetica;
             display: flex;
             justify-content: center;
-            flex-direction: column;
+            flex-direction: column;            
+            border-radius: 0.25rem;
+            padding: 0.25rem;            
         }
         .btn{
+            margin-inline: auto;
+            
             display: flex;
             height: 2rem;
             width: 6rem;
@@ -86,14 +96,18 @@
             justify-content: center;
             
             align-items: center;
-            border-radius: 0.5rem;
+            border-radius: 0.25rem;
         }
         .btn button{
-            border-radius: 0.5rem;
+            border-radius: 0.25rem;
             width: 90%;
             height: 75%;
         }
-        
+        section{
+            display: flex;
+            justify-content: center;
+
+        }
     </style>
     <body>
 
