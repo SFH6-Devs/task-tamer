@@ -19,19 +19,22 @@
         }
         body {
             margin: 0;
-            background-color: var(--background-color);
+            overflow: hidden;
+            /*background-color: var(--background-color);*/
+            background-color: #d4d4d4;
             
         }
         nav {
-            margin: 0;
+            margin-inline: 0;
             display: flex;
             justify-content: space-between;
-            gap: 20px;
+            gap: 16px;
             background-color: var(--nav-background-color);
             align-items: center;
             padding-inline: 20px; /* top right bottom left */
             padding-block: 10px;
-            border-bottom: 2px solid var(--nav-background-color);            
+            border-bottom: 2px solid var(--nav-background-color);
+            margin-bottom: 16px;            
         }
         nav a {
             text-decoration: none;
@@ -42,17 +45,17 @@
         }
         nav a:hover{
             color: var(--accent-color);
-            border-bottom: 3px solid var(--nav-background-color);
+            
         }
         .links{
             justify-self: end;
             width: 100%;
             display:flex;
             justify-content: flex-end;
-            gap: 50px;
+            gap: 48px;
         }
         img{
-            height: 30px;
+            height: 28px;
             width: auto;
             margin: 0;
             padding: 0;
@@ -60,23 +63,30 @@
         section {
             display: flex;
             height: calc(100vh - 60px); /* Full height minus nav height */
-            gap: 20px;
+            gap: 16px;
         }
         .sidebar {
             width: calc(var(--sidewidth));
-            max-width: 270px;
-            background-color: var(--sidebar-background-color);
+            max-width: 272px;
+            /*background-color: var(--sidebar-background-color);*/
+            background-color: #e5e5e5;
             border-right: 1px solid var(--nav-background-color);
-            max-height: 30vh;
+            max-height: 28vh;
+            border-radius: 16px;
+            
         }
+    
         .main{
-            background-color: beige;
+            background-color: #e5e5e5;
             width: calc(2*var(--sidewidth));
             display: flex;
             justify-content: center;
             align-items: center;
-            max-height: 80vh;
-            max-width: calc(270px*2);
+            max-height: 84vh;
+            max-width: calc(272px*2);
+            overflow-y: scroll;
+            scrollbar-width: none;
+            border-radius: 16px;
         }
         .add-task{
             font-family: Helvetica;
@@ -88,7 +98,6 @@
         }
         .btn{
             margin-inline: auto;
-            
             display: flex;
             height: 2rem;
             width: 6rem;
@@ -122,7 +131,10 @@
                 
             </nav>
             <section>
+                
                 <div class="sidebar"></div>
+                    
+                
                 <div class="main">
                     <div class="add-task">
                         <h2>Add New Task</h2>
