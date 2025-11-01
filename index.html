@@ -136,15 +136,22 @@
                     
                 
                 <div class="main">
-                    <div class="add-task">
+                    <div class="add-task" id="taskbtn">
                         <h2>Add New Task</h2>
                         <div class="btn">
-                            <button type="submit">Add Task</button>
+                            <button type="submit" onclick="addTask()">Add Task</button>
                         </div>
                         
                     </div>
                 </div>
             </section>
-        <script src="" async defer></script>
+        <script>
+
+            function addTask(){
+                
+                let buton = document.getElementById('taskbtn');
+                buton.style.display = 'none';
+            }
+        </script>
     </body>
 </html>
