@@ -16,12 +16,14 @@
             --sidebar-background-color: #ffffff;
             --accent-color: #ab20d1;
             --sidewidth: 25%;
+
         }
         body {
             margin: 0;
             overflow: hidden;
             /*background-color: var(--background-color);*/
             background-color: #d4d4d4;
+            font-family: Helvetica;
             
         }
         nav {
@@ -66,6 +68,8 @@
             gap: 16px;
         }
         .sidebar {
+            padding: 0.2%;
+            display: flex;
             width: calc(var(--sidewidth));
             max-width: 272px;
             /*background-color: var(--sidebar-background-color);*/
@@ -73,6 +77,20 @@
             border-right: 1px solid var(--nav-background-color);
             max-height: 28vh;
             border-radius: 16px;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            
+        }
+        .reloadbtn{
+            width : 2rem;
+            height: 2rem;
+            padding: 0.5rem;
+            border: 1px solid;
+            border-radius: 2rem;
+            margin-left: auto;
+            margin-bottom: auto;
+            
             
         }
     
@@ -89,7 +107,7 @@
             border-radius: 16px;
         }
         .add-task{
-            font-family: Helvetica;
+            
             display: flex;
             justify-content: center;
             flex-direction: column;            
@@ -132,7 +150,14 @@
             </nav>
             <section>
                 
-                <div class="sidebar"></div>
+                <div class="sidebar">
+                    <img src="https://www.svgrepo.com/show/348783/reload.svg" class = "reloadbtn" id="reloadbtn" onclick = "reload();">
+                    <div class="actionside" id="actionside">
+                        <h1>Welcome to Task Tamer</h1>
+                    </div>
+
+
+                </div>
                     
                 
                 <div class="main">
@@ -148,9 +173,13 @@
         <script>
 
             function addTask(){
-                
                 let buton = document.getElementById('taskbtn');
                 buton.style.display = 'none';
+                let side = document.getElementById('actionside');
+                side.style.display = 'none';
+            }
+            function reload(){
+                window.location.reload();
             }
         </script>
     </body>
