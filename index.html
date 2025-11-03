@@ -68,19 +68,21 @@
             gap: 16px;
         }
         .sidebar {
-            
+            max-width: 377px;
+            padding: 8px;
             display: flex;
             width: calc(var(--sidewidth));
-            max-width: 272px;
+            
             /*background-color: var(--sidebar-background-color);*/
             background-color: #e5e5e5;
             border-right: 1px solid var(--nav-background-color);
-            /*max-height: 28vh;*/
+            max-height: fit-content;
+
             border-radius: 16px;
             justify-content: start;
             align-items: center;
             flex-direction: column;
-            row-gap: 16%;
+            gap: 4px;
             
         }
         .sidebar  h2{
@@ -147,9 +149,83 @@
             justify-content: center;
 
         }
-        #text-area{
+        form *{
+            min-width: none;
+        }
+        form{
+            
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            gap: 8px;
+            justify-content: center;
             max-width: fit-content;
-            min-width: fit-content;
+        }
+        form textarea{
+            font-size: 12px;
+            min-height: 13px;
+        }
+        .date{
+            display: flex;
+            width: 100%;
+            gap: 4px;
+        }
+        
+        .date input{
+            font-size: 75%;                      
+        }
+        .desc{
+            display: flex;
+            flex-grow: 1;
+            flex-direction: column;
+            width: fit-content;
+        }
+        .desc label{
+            text-align: left;
+        }
+        .desc textarea{
+            display: flex;
+            align-self: flex-end;
+            width: 100%;
+            
+            
+        }
+        .title{
+            display: flex;
+            flex-grow: 1;
+            
+        }
+        .title input{
+            width: 100%;
+        }
+        @media only screen and (max-width: 1024px) {
+            body {
+                
+                background-color: lightblue;
+            }
+            section{
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+
+            }
+            .sidebar{
+                display: flex;
+                flex-grow: 1;
+                width: 50%;
+
+            }
+            .main{
+                display: flex;
+                flex-grow: 1;
+                width: 50%;
+                
+            }
+        }
+        @media only screen and (max-width: 1024px) {
+            body {
+                background-color: lightblue;
+        }
         }
     </style>
     <body>
@@ -171,15 +247,32 @@
                     <div class="actionside" id="actionside">
                         <h2>Welcome to Task Tamer</h2>
                     </div>
-                    <form>
-                        <label>Title:</label><input type="text">
-                        <label>description:</label>
-                        <textarea name="textarea" rows="2" cols="26" id="text-area">write here</textarea>
-                        <br>
-                        <label>due:</label><input type="date">
-                        <br>
-                        <input type="submit">
-                    </form>
+                    <div class="taskadd">
+                        <form>
+
+                            <div class="title">
+                                <label>Title:</label>
+                                <input type="text">
+                            </div>
+                            <div class="desc">
+                                <label>Description:</label>
+                                <textarea name="textarea" rows="5"  id="text-area" placeholder="write here"></textarea>
+                            </div>
+                            
+                            <div class="date">
+                                <label>Set:</label>
+                                <input type="date">
+
+                                <label>Due:</label>
+                                <input type="date">
+                            </div>
+                            
+                            <input type="submit">
+                        </form>
+
+
+                    </div>
+                    
 
                 </div>
                     
