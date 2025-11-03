@@ -75,7 +75,7 @@
             /*background-color: var(--sidebar-background-color);*/
             background-color: #e5e5e5;
             border-right: 1px solid var(--nav-background-color);
-            max-height: 28vh;
+            /*max-height: 28vh;*/
             border-radius: 16px;
             justify-content: start;
             align-items: center;
@@ -147,6 +147,10 @@
             justify-content: center;
 
         }
+        #text-area{
+            max-width: fit-content;
+            min-width: fit-content;
+        }
     </style>
     <body>
 
@@ -167,7 +171,15 @@
                     <div class="actionside" id="actionside">
                         <h2>Welcome to Task Tamer</h2>
                     </div>
-
+                    <form>
+                        <label>Title:</label><input type="text">
+                        <label>description:</label>
+                        <textarea name="textarea" rows="2" cols="26" id="text-area">write here</textarea>
+                        <br>
+                        <label>due:</label><input type="date">
+                        <br>
+                        <input type="submit">
+                    </form>
 
                 </div>
                     
