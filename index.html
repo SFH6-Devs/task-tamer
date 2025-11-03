@@ -76,7 +76,7 @@
             /*background-color: var(--sidebar-background-color);*/
             background-color: #e5e5e5;
             border-right: 1px solid var(--nav-background-color);
-            max-height: fit-content;
+            max-height: 25vh;
 
             border-radius: 16px;
             justify-content: start;
@@ -227,6 +227,9 @@
                 background-color: lightblue;
         }
         }
+        .taskadd{
+            display: none;
+        }
     </style>
     <body>
 
@@ -247,7 +250,7 @@
                     <div class="actionside" id="actionside">
                         <h2>Welcome to Task Tamer</h2>
                     </div>
-                    <div class="taskadd">
+                    <div class="taskadd" id="taskadd">
                         <form>
 
                             <div class="title">
@@ -294,6 +297,8 @@
                 buton.style.display = 'none';
                 let side = document.getElementById('actionside');
                 side.style.display = 'none';
+                let inpfield = document.getElementById('taskadd');
+                inpfield.style.display = 'flex';
             }
             function reload(){
                 window.location.reload();
