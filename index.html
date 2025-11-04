@@ -68,19 +68,21 @@
             gap: 16px;
         }
         .sidebar {
-            
+            max-width: 377px;
+            padding: 8px;
             display: flex;
             width: calc(var(--sidewidth));
-            max-width: 272px;
+            
             /*background-color: var(--sidebar-background-color);*/
             background-color: #e5e5e5;
             border-right: 1px solid var(--nav-background-color);
-            max-height: 28vh;
+            max-height: 25vh;
+
             border-radius: 16px;
             justify-content: start;
             align-items: center;
             flex-direction: column;
-            row-gap: 16%;
+            gap: 4px;
             
         }
         .sidebar  h2{
@@ -147,6 +149,94 @@
             justify-content: center;
 
         }
+        form *{
+            min-width: none;
+        }
+        form{
+            
+            display: flex;
+            flex-direction: column;
+            flex-wrap: wrap;
+            gap: 8px;
+            justify-content: center;
+            max-width: fit-content;
+        }
+        form textarea{
+            font-size: 12px;
+            min-height: 13px;
+        }
+        .date{
+            display: flex;
+            width: 100%;
+            gap: 4px;
+        }
+        
+        .date input{
+            font-size: 75%;                      
+        }
+        .desc{
+            display: flex;
+            flex-grow: 1;
+            flex-direction: column;
+            
+        }
+        .desc label{
+            text-align: left;
+        }
+        .desc textarea{
+            display: flex;
+            align-self: flex-end;
+            width: 100%;
+            
+            
+        }
+        .title{
+            display: flex;
+            flex-grow: 1;
+            
+        }
+        .title input{
+            
+            width: 100%;
+        }
+        @media only screen and (max-width: 1024px) {
+            body {
+                
+                background-color: lightblue;
+            }
+            section{
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+
+            }
+            .sidebar{
+                max-width: 50%;
+                display: flex;
+                flex-grow: 1;
+                width: 50%;
+
+            }
+            form{
+                display: flex;
+                flex-direction: column;
+            }
+            .main{
+                max-width: 50%;
+                display: flex;
+                flex-grow: 1;
+                width: 50%;
+                
+            }
+        }
+        @media only screen and (max-width: 1024px) {
+            body {
+                background-color: lightblue;
+        }
+        }
+        .taskadd{
+            display: none;
+        }
     </style>
     <body>
 
@@ -163,11 +253,36 @@
             <section>
                 
                 <div class="sidebar">
-                    <img src="https://www.svgrepo.com/show/348783/reload.svg" class = "reloadbtn" id="reloadbtn" onclick = "reload();">
+                    <img src="https://www.svgrepo.com/show/348783/reload.svg" class = "reloadbtn" id="reloadbtn" title="Reload Page"onclick = "reload();">
                     <div class="actionside" id="actionside">
                         <h2>Welcome to Task Tamer</h2>
                     </div>
+                    <div class="taskadd" id="taskadd">
+                        <form>
 
+                            <div class="title">
+                                <label>Title:</label>
+                                <input type="text">
+                            </div>
+                            <div class="desc">
+                                <label>Description:</label>
+                                <textarea name="textarea" rows="5"  id="text-area" placeholder="write here"></textarea>
+                            </div>
+                            
+                            <div class="date">
+                                <label>Set:</label>
+                                <input type="date">
+
+                                <label>Due:</label>
+                                <input type="date">
+                            </div>
+                            
+                            <input type="submit">
+                        </form>
+
+
+                    </div>
+                    
 
                 </div>
                     
@@ -186,9 +301,14 @@
 
             function addTask(){
                 let buton = document.getElementById('taskbtn');
+                let sidebar = document.getElementsByClassName('sidebar')[0];
                 buton.style.display = 'none';
                 let side = document.getElementById('actionside');
                 side.style.display = 'none';
+                sidebar.style.maxHeight = "fit-content";
+                let inpfield = document.getElementById('taskadd');
+                inpfield.style.display = 'flex';
+
             }
             function reload(){
                 window.location.reload();
