@@ -262,22 +262,24 @@
 
                             <div class="title">
                                 <label>Title:</label>
-                                <input type="text">
+                                <input type="text" id="titleInp" class="titleInp">
                             </div>
                             <div class="desc">
                                 <label>Description:</label>
-                                <textarea name="textarea" rows="5"  id="text-area" placeholder="write here"></textarea>
+                                <textarea class="descInp"  id="descInp" name="textarea" rows="5" placeholder="write here"></textarea>
                             </div>
                             
                             <div class="date">
                                 <label>Set:</label>
-                                <input type="date">
+                                <input class="setDateInp" id="setDateInp" type="date">
 
                                 <label>Due:</label>
-                                <input type="date">
+                                <input  class="dueDateInp" id="dueDateInp" type="date ">
                             </div>
                             
-                            <input type="submit">
+                            <button type="button" class="taskSubmit" id="taskSubmit" onclick="createTask(); return false;">
+                                Submit
+                            </button>
                         </form>
 
 
@@ -291,14 +293,14 @@
                     <div class="add-task" id="taskbtn">
                         <h2>Add New Task</h2>
                         <div class="btn">
-                            <button type="submit" onclick="addTask()">Add Task</button>
+                            <button type="submit" onclick="addTask();">Add Task</button>
                         </div>
                         
                     </div>
                 </div>
             </section>
         <script>
-
+            
             function addTask(){
                 let buton = document.getElementById('taskbtn');
                 let sidebar = document.getElementsByClassName('sidebar')[0];
@@ -312,6 +314,25 @@
             }
             function reload(){
                 window.location.reload();
+            }
+            function createTask(){
+                const title = document.getElementById('titleInp');
+                const desc = document.getElementById('descInp');
+                const setDate = document.getElementById('setDateInp');
+                const dueDate = document.getElementById('dueDateInp');
+                const taskSubmit = document.getElementById('taskSubmit');
+                class task {
+                    constructor(title,desc,setDate,dueDate){
+                        this.title = title.value;
+                        this.desc = desc.value;
+                        this.setDate = setDate.value;
+                        this.dueDate = dueDate.value;
+
+                    }
+                }
+                let currTask = new task(title,desc,setDate,dueDate);
+                console.log("Done");
+                alert(`${currTask.title} \n${currTask.desc}\n${currTask.setDate}\n${currTask.dueDate}`);
             }
         </script>
     </body>
