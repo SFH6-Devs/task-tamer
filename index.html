@@ -155,7 +155,7 @@
         form{
             
             display: flex;
-            flex-direction: row;
+            flex-direction: column;
             flex-wrap: wrap;
             gap: 8px;
             justify-content: center;
@@ -178,7 +178,7 @@
             display: flex;
             flex-grow: 1;
             flex-direction: column;
-            width: fit-content;
+            
         }
         .desc label{
             text-align: left;
@@ -196,6 +196,7 @@
             
         }
         .title input{
+            
             width: 100%;
         }
         @media only screen and (max-width: 1024px) {
@@ -210,12 +211,18 @@
 
             }
             .sidebar{
+                max-width: 50%;
                 display: flex;
                 flex-grow: 1;
                 width: 50%;
 
             }
+            form{
+                display: flex;
+                flex-direction: column;
+            }
             .main{
+                max-width: 50%;
                 display: flex;
                 flex-grow: 1;
                 width: 50%;
@@ -246,7 +253,7 @@
             <section>
                 
                 <div class="sidebar">
-                    <img src="https://www.svgrepo.com/show/348783/reload.svg" class = "reloadbtn" id="reloadbtn" onclick = "reload();">
+                    <img src="https://www.svgrepo.com/show/348783/reload.svg" class = "reloadbtn" id="reloadbtn" title="Reload Page"onclick = "reload();">
                     <div class="actionside" id="actionside">
                         <h2>Welcome to Task Tamer</h2>
                     </div>
@@ -294,11 +301,14 @@
 
             function addTask(){
                 let buton = document.getElementById('taskbtn');
+                let sidebar = document.getElementsByClassName('sidebar')[0];
                 buton.style.display = 'none';
                 let side = document.getElementById('actionside');
                 side.style.display = 'none';
+                sidebar.style.maxHeight = "fit-content";
                 let inpfield = document.getElementById('taskadd');
                 inpfield.style.display = 'flex';
+
             }
             function reload(){
                 window.location.reload();
