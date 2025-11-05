@@ -119,6 +119,7 @@
             overflow-y: scroll;
             scrollbar-width: none;
             border-radius: 16px;
+            flex-direction: column;
         }
         .add-task{
             
@@ -237,6 +238,26 @@
         .taskadd{
             display: none;
         }
+        .tasks{
+            display: flex;
+            width: 75%;
+            flex-grow: 1;
+            flex-direction: column;
+        }
+        .tasklists{
+            display: flex;
+            flex-grow: 1;
+            flex-direction: column;
+        }
+        .tasktask{
+            display: flex;
+            border-radius: 1rem;
+            max-height: 12vh;
+            background-color: var(--primary-color);
+            flex-grow: 1;
+            justify-content: center;
+            align-items: center;
+        }
     </style>
     <body>
 
@@ -297,6 +318,15 @@
                         </div>
                         
                     </div>
+                    <div class="tasks">
+                        <h2>Your Tasks</h2>
+                        <div class="tasklists">
+                            <div class="tasktask">
+                                x
+
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </section>
         <script>
@@ -331,7 +361,7 @@
                     }
                 }
                 let currTask = new task(title,desc,setDate,dueDate);
-                console.log("Done");
+                console.log(currTask);
                 alert(`${currTask.title} \n${currTask.desc}\n${currTask.setDate}\n${currTask.dueDate}`);
             }
         </script>
