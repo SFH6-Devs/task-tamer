@@ -94,6 +94,8 @@
             display: flex;
             justify-content: center;
             align-items: center;
+            height: 75%;
+            
         }
         .reloadbtn{
             align-self: flex-end;
@@ -258,6 +260,8 @@
             justify-content: center;
             align-items: center;
         }
+        
+
     </style>
     <body>
 
@@ -363,6 +367,15 @@
                 let currTask = new task(title,desc,setDate,dueDate);
                 console.log(currTask);
                 alert(`${currTask.title} \n${currTask.desc}\n${currTask.setDate}\n${currTask.dueDate}`);
+                console.log("Done");
+                console.log(currTask);
+                if (currTask.title !== ''){
+                    alert(`Title: ${currTask.title} \nDescription: ${currTask.desc}\nSet Date: ${currTask.setDate}\nDue Date: ${currTask.dueDate}`);
+                    
+                }
+                else{
+                    alert("Title Required");
+                }
             }
         </script>
     </body>
