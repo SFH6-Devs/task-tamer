@@ -250,6 +250,7 @@
             display: flex;
             flex-grow: 1;
             flex-direction: column;
+            
         }
         .tasktask{
             display: flex;
@@ -259,8 +260,25 @@
             flex-grow: 1;
             justify-content: center;
             align-items: center;
+            
         }
-        
+       .taskimg{
+            margin-inline: 12px;
+            width: 20%;
+            aspect-ratio: 1/1;
+            height: auto;
+            background-color: #ffffff;
+            
+       } 
+       .taskdeets{
+            
+            margin-inline: 12px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-grow: 1;
+       }
+
 
     </style>
     <body>
@@ -323,11 +341,15 @@
                         
                     </div>
                     <div class="tasks">
-                        <h2>Your Tasks</h2>
+                        <h2 class="tasktask">Your Tasks</h2>
                         <div class="tasklists">
                             <div class="tasktask">
-                                x
+                                <div id="taskimg"class="taskimg">
 
+                                </div>
+                                <div class="taskdeets">
+                                    <h3 class="taskTitle" id="taskTitle">Task Name</h3>
+                                </div>
                             </div>
                         </div>
                     </div>
