@@ -229,6 +229,7 @@
         }
         .taskadd{
             display: none;
+            min-width: fit-content;
         }
         .tasks{
             display: flex;
