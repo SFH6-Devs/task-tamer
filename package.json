@@ -1,0 +1,8 @@
+{
+  "devDependencies": {
+    "servor": "4.0.0"
+  },
+  "scripts": {
+    "start": "servor index.html 8080 --reload --browse"
+  }
+}

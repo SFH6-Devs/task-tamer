@@ -51,3 +51,18 @@ body.addEventListener('keypress', (event) => {
         addTask();
     }
 })
+
+let taskTick = document.getElementById('taskimg');
+taskTick.addEventListener("click", function(){
+    // if (taskTick.style.backgroundColor === "#ffffff"){
+    //     taskTick.style.backgroundColor = "#000000";
+    // }
+    // else{
+    if (taskTick.style.backgroundColor !== "black"){
+        taskTick.style.backgroundColor = "black";
+    }
+    else{
+        taskTick.style.backgroundColor = "white";
+    }
+    // }
+})
