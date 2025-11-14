@@ -39,7 +39,7 @@ function createTask(){
     console.log(currTask);
     if (currTask.title !== ''){
         alert(`Title: ${currTask.title} \nDescription: ${currTask.desc}\nSet Date: ${currTask.setDate}\nDue Date: ${currTask.dueDate}`);
-        
+         
     }
     else{
         alert("Title Required");
