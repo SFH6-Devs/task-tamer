@@ -8,7 +8,7 @@ function addTask(){
     taskholder.style.display = 'flex';
     buton.style.display = 'none';
     side.style.display = 'none';
-    sidebar.style.maxHeight = "fit-content";
+    sidebar.style.maxHeight = "calc(84vh/3)";
     inpfield.style.display = 'flex';
 
 }
@@ -66,3 +66,5 @@ taskTick.addEventListener("click", function(){
     }
     // }
 })
+document.addEventListener("keypress", (event) => {
+    if (event.key === "r"){reload()}});
