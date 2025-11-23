@@ -8,7 +8,7 @@ function addTask(){
     taskholder.style.display = 'flex';
     buton.style.display = 'none';
     side.style.display = 'none';
-    sidebar.style.maxHeight = "fit-content";
+    sidebar.style.maxHeight = "calc(84vh/3)";
     inpfield.style.display = 'flex';
 
 }
@@ -39,7 +39,7 @@ function createTask(){
     console.log(currTask);
     if (currTask.title !== ''){
         alert(`Title: ${currTask.title} \nDescription: ${currTask.desc}\nSet Date: ${currTask.setDate}\nDue Date: ${currTask.dueDate}`);
-        
+         
     }
     else{
         alert("Title Required");
@@ -66,3 +66,5 @@ taskTick.addEventListener("click", function(){
     }
     // }
 })
+document.addEventListener("keypress", (event) => {
+    if (event.key === "r"){reload()}});

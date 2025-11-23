@@ -57,33 +57,36 @@ section {
     gap: 16px;
 }
 .sidebar {
-    max-width: 377px;
-    padding: 8px;
+    min-width: fit-content;
+    min-height: fit-content;
+    max-height: calc(84vh/3);
+
+    padding: 0;
     display: flex;
     width: calc(var(--sidewidth));
+    max-width:272px;
     
     /*background-color: var(--sidebar-background-color);*/
     background-color: #e5e5e5;
     border-right: 1px solid var(--nav-background-color);
-    max-height: 25vh;
+   
 
     border-radius: 16px;
-    justify-content: start;
-    align-items: center;
-    flex-direction: column;
-    gap: 4px;
+    justify-content: center;
     
+    flex-direction: column;
+    align-items: center;
+
 }
 .sidebar  h2{
     text-align: center;
-    margin-block: auto;
-            
+    font-size: 1.2rem;
 }
 .actionside{
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 75%;
+    
     
 }
 .reloadbtn{
@@ -143,9 +146,11 @@ section{
 }
 form *{
     min-width: none;
+    max-height: 25vh;
+      
 }
 form{
-    
+    max-height: calc(84vh/3);
     display: flex;
     flex-direction: column;
     flex-wrap: wrap;
@@ -258,7 +263,6 @@ form textarea{
     background-color: var(--background-color);
     flex-grow: 1;
     
-    justify-content: center;
     gap: 5%;
     
     align-items: center;
@@ -279,12 +283,10 @@ form textarea{
 } 
 .taskdeets{
     
-    margin-inline: 12px;
     display: flex;
-    
-    justify-content: center;
-    align-items: center;
-    
+    gap: 20px;
+    max-width: fit-content;
+    flex-grow: 1; 
 }
 .taskhead{
     display: flex;
